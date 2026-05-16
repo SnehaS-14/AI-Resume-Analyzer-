@@ -33,5 +33,5 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://resume-ai-backend.onrender.com
+        value: https://ai-resume-analyzer-svry.onrender.com
         scope: build
