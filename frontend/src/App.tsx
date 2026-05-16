@@ -7,7 +7,7 @@ import ResultPanel from './components/ResultPanel'
 import HistoryPanel from './components/HistoryPanel'
 import type { AnalysisResult, ResumeRecord } from './types'
 
-const API_URL = 'http://localhost:9000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://ai-resume-analyzer-svry.onrender.com'
 
 type Tab = 'analyze' | 'history'
 type AuthPage = 'login' | 'signup'
