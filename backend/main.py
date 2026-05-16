@@ -32,6 +32,7 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:5180",
+        "https://resume-ai-frontend.onrender.com",
     ],
     allow_credentials=False,
     allow_methods=["*"],
