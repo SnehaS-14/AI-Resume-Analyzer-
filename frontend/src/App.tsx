@@ -12,6 +12,8 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://ai-resume-analyzer-svry
 type Tab = 'analyze' | 'history'
 type AuthPage = 'login' | 'signup'
 
+// Production deployment
+
 export default function App() {
   // Auth state
   const [isLoggedIn, setIsLoggedIn] = useState(false)
