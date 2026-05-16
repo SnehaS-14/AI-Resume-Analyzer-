@@ -45,15 +45,15 @@ export default function App() {
   const [historyLoading, setHistoryLoading] = useState(false)
   const [selectedHistoryItem, setSelectedHistoryItem] = useState<ResumeRecord | null>(null)
 
-  const handleLogin = (userId: string, email: string, name: string) => {
+  const handleLogin = (userId: string, _email: string, name: string) => {
     setUserId(userId)
     setUserName(name)
     setIsLoggedIn(true)
     localStorage.setItem('auth', JSON.stringify({ userId, userName: name }))
   }
 
-  const handleSignup = (userId: string, email: string, name: string) => {
-    handleLogin(userId, email, name)
+  const handleSignup = (userId: string, _email: string, name: string) => {
+    handleLogin(userId, _email, name)
   }
 
   const handleLogout = () => {
@@ -360,7 +360,7 @@ export default function App() {
                 <ResultPanel
                   result={selectedHistoryItem as AnalysisResult}
                   rewritten={selectedHistoryItem.rewritten_text || null}
-                  onRewrite={() => {}}
+                  onRewrite={async () => {}}
                   onDownload={() => {}}
                   rewriting={false}
                 />

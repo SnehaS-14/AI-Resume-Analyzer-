@@ -58,13 +58,13 @@ export default function HistoryPanel({ history, loading, onViewItem }: HistoryPa
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {history.map((item) => (
         <div key={item.id} style={cardStyle}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)'
-            (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'
+          onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)'
+            e.currentTarget.style.transform = 'translateY(-2px)'
           }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.04)'
-            (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'
+          onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.04)'
+            e.currentTarget.style.transform = 'translateY(0)'
           }}
         >
           <div style={{ flex: 1 }}>
