@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+groq
+pdfplumber
+python-docx
+python-dotenv
+python-multipart
+motor
+pymongo
+passlib[bcrypt]
+email-validator
