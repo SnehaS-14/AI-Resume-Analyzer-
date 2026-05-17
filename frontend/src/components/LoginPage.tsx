@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:9000'
+const API_URL = 'https://ai-resume-analyzer-svry.onrender.com'
 
 interface LoginPageProps {
   onLogin: (userId: string, email: string, name: string) => void
