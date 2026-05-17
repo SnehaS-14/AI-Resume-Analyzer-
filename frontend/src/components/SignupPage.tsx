@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:9000'
-
 interface SignupPageProps {
   onSignup: (userId: string, email: string, name: string) => void
   onSwitchToLogin: () => void
+  apiUrl: string
 }
 
-export default function SignupPage({ onSignup, onSwitchToLogin }: SignupPageProps) {
+export default function SignupPage({ onSignup, onSwitchToLogin, apiUrl }: SignupPageProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -50,7 +49,7 @@ export default function SignupPage({ onSignup, onSwitchToLogin }: SignupPageProp
 
     setLoading(true)
     try {
-      const response = await axios.post(`${API_URL}/auth/signup`, {
+      const response = await axios.post(`${apiUrl}/auth/signup`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,

@@ -142,11 +142,13 @@ export default function App() {
       <LoginPage
         onLogin={handleLogin}
         onSwitchToSignup={() => setAuthPage('signup')}
+        apiUrl={API_URL}
       />
     ) : (
       <SignupPage
         onSignup={handleSignup}
         onSwitchToLogin={() => setAuthPage('login')}
+        apiUrl={API_URL}
       />
     )
   }

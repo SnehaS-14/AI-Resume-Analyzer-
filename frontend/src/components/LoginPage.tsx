@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const API_URL = 'https://ai-resume-analyzer-svry.onrender.com'
-
 interface LoginPageProps {
   onLogin: (userId: string, email: string, name: string) => void
   onSwitchToSignup: () => void
+  apiUrl: string
 }
 
-export default function LoginPage({ onLogin, onSwitchToSignup }: LoginPageProps) {
+export default function LoginPage({ onLogin, onSwitchToSignup, apiUrl }: LoginPageProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -29,7 +28,7 @@ export default function LoginPage({ onLogin, onSwitchToSignup }: LoginPageProps)
 
     setLoading(true)
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, {
+      const response = await axios.post(`${apiUrl}/auth/login`, {
         email,
         password,
       })
