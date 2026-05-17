@@ -164,7 +164,7 @@ export default function App() {
       {/* Header */}
       <header style={{
         background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-        padding: '16px 32px',
+        padding: 'clamp(12px, 4vw, 16px) clamp(16px, 5vw, 32px)',
         boxShadow: '0 10px 30px rgba(16, 185, 129, 0.25)',
         borderBottom: 'none',
         position: 'sticky',
@@ -172,18 +172,18 @@ export default function App() {
         zIndex: 100,
       }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '32px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'clamp(12px, 3vw, 32px)', flexWrap: 'wrap' }}>
             {/* Logo Section */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 14px)', flex: 1, minWidth: '200px' }}>
               {/* Icon */}
               <div style={{
-                fontSize: '32px',
+                fontSize: 'clamp(24px, 5vw, 32px)',
                 lineHeight: '1',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '48px',
-                height: '48px',
+                width: 'clamp(40px, 8vw, 48px)',
+                height: 'clamp(40px, 8vw, 48px)',
                 background: 'rgba(255, 255, 255, 0.2)',
                 borderRadius: '12px',
                 backdropFilter: 'blur(15px)',
@@ -193,22 +193,24 @@ export default function App() {
               </div>
 
               {/* Brand Info */}
-              <div>
+              <div style={{ minWidth: '0' }}>
                 <h1 style={{
-                  fontSize: '24px',
+                  fontSize: 'clamp(20px, 6vw, 24px)',
                   fontWeight: '800',
                   margin: '0',
                   color: '#ffffff',
                   letterSpacing: '-0.5px',
+                  wordBreak: 'break-word',
                 }}>
                   Resume AI
                 </h1>
                 <p style={{
                   color: 'rgba(255, 255, 255, 0.85)',
                   margin: '2px 0 0 0',
-                  fontSize: '11px',
+                  fontSize: 'clamp(9px, 2vw, 11px)',
                   fontWeight: '600',
                   letterSpacing: '0.5px',
+                  display: window.innerWidth < 480 ? 'none' : 'block',
                 }}>
                   Powered by Groq
                 </p>
@@ -219,10 +221,12 @@ export default function App() {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '18px',
+              gap: 'clamp(10px, 2vw, 18px)',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-end',
             }}>
               {/* User Info */}
-              <div style={{ textAlign: 'right' }}>
+              <div style={{ textAlign: 'right', display: window.innerWidth < 480 ? 'none' : 'block' }}>
                 <p style={{
                   margin: '0 0 2px 0',
                   fontSize: '10px',
@@ -236,7 +240,7 @@ export default function App() {
                 </p>
                 <p style={{
                   margin: '0',
-                  fontSize: '14px',
+                  fontSize: 'clamp(12px, 3vw, 14px)',
                   fontWeight: '700',
                   color: 'white',
                 }}>
@@ -251,9 +255,9 @@ export default function App() {
                   background: 'rgba(255, 255, 255, 0.25)',
                   border: '1px solid rgba(255, 255, 255, 0.4)',
                   color: 'white',
-                  padding: '8px 18px',
+                  padding: 'clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 18px)',
                   borderRadius: '8px',
-                  fontSize: '12px',
+                  fontSize: 'clamp(11px, 2.5vw, 12px)',
                   fontWeight: '700',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
@@ -278,18 +282,18 @@ export default function App() {
         </div>
       </header>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(20px, 5vw, 40px) clamp(12px, 4vw, 20px)' }}>
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', gap: 'clamp(8px, 2vw, 12px)', marginBottom: 'clamp(20px, 5vw, 32px)', flexWrap: 'wrap' }}>
           {(['analyze', 'history'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               style={{
-                padding: '12px 24px',
+                padding: 'clamp(10px, 2vw, 12px) clamp(16px, 4vw, 24px)',
                 borderRadius: '8px',
                 border: 'none',
-                fontSize: '14px',
+                fontSize: 'clamp(13px, 2.5vw, 14px)',
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.3s',
