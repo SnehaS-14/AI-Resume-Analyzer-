@@ -110,15 +110,16 @@ export default function App() {
     }
   }
 
-  const handleDownload = async () => {
-    if (!result?.id || !userId) {
+  const handleDownload = async (analysisId?: string) => {
+    const id = analysisId || result?.id
+    if (!id || !userId) {
       setError('Missing resume or user information')
       return
     }
 
     try {
       setError(null)
-      const downloadUrl = `${API_URL}/rewrite/${result.id}/download?user_id=${userId}`
+      const downloadUrl = `${API_URL}/rewrite/${id}/download?user_id=${userId}`
 
       // Fetch the PDF file as blob
       const response = await axios.get(downloadUrl, {
@@ -395,7 +396,7 @@ export default function App() {
                   result={selectedHistoryItem as AnalysisResult}
                   rewritten={selectedHistoryItem.rewritten_text || null}
                   onRewrite={async () => {}}
-                  onDownload={() => {}}
+                  onDownload={() => handleDownload(selectedHistoryItem?.id)}
                   rewriting={false}
                 />
               </div>
@@ -418,7 +419,10 @@ export default function App() {
           <HistoryPanel
             history={history}
             loading={historyLoading}
-            onViewItem={(item) => setSelectedHistoryItem(item)}
+            onViewItem={(item) => {
+              setSelectedHistoryItem(item)
+              setActiveTab('analyze')
+            }}
           />
         )}
       </div>

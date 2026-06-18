@@ -6,8 +6,9 @@ from io import BytesIO
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
+from reportlab.lib import colors
 
 
 def generate_resume_pdf(resume_text: str) -> BytesIO:
@@ -55,7 +56,9 @@ def generate_resume_pdf(resume_text: str) -> BytesIO:
         spaceAfter=8,
         spaceBefore=8,
         fontName='Helvetica-Bold',
-        borderPadding=3
+        borderPadding=3,
+        borderBottom=2,
+        borderColor=colors.HexColor('#333333')
     )
 
     body_style = ParagraphStyle(
