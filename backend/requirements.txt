@@ -9,3 +9,4 @@ motor
 pymongo
 passlib[bcrypt]
 email-validator
+reportlab

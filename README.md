@@ -233,7 +233,7 @@ d:\AI Resume analyser\
 1. After analysis, click "✏️ Rewrite My Resume"
 2. Wait for Groq to incorporate the action items
 3. View the rewritten resume in the text box
-4. Click "📥 Download Resume" to save as .txt file
+4. Click "📥 Download Resume" to save as .pdf file
 
 ### 3. View History
 1. Click the "📋 History" tab

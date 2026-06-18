@@ -353,7 +353,7 @@ curl -X POST "https://ai-resume-analyzer-svry.onrender.com/rewrite/507f1f77bcf86
 
 **Endpoint:** `GET /rewrite/{id}/download`
 
-**Description:** Download the rewritten resume as a text file
+**Description:** Download the rewritten resume as a PDF file
 
 **Path Parameters:**
 | Parameter | Type | Required | Description |
@@ -366,9 +366,9 @@ curl -X POST "https://ai-resume-analyzer-svry.onrender.com/rewrite/507f1f77bcf86
 | user_id | string | Yes | MongoDB ObjectId of the user |
 
 **Response (200 OK):**
-- Content-Type: `text/plain`
-- File attachment with name: `{original_filename}_rewritten.txt`
-- Body: Plain text content of rewritten resume
+- Content-Type: `application/pdf`
+- File attachment with name: `{original_filename}_rewritten.pdf`
+- Body: PDF binary content of rewritten resume
 
 **Possible Errors:**
 | Status | Detail |
@@ -376,11 +376,12 @@ curl -X POST "https://ai-resume-analyzer-svry.onrender.com/rewrite/507f1f77bcf86
 | 400 | Invalid ID format or resume not yet rewritten |
 | 404 | Analysis not found |
 | 403 | Unauthorized |
+| 500 | Failed to generate PDF |
 
 **Example with cURL:**
 ```bash
 curl "https://ai-resume-analyzer-svry.onrender.com/rewrite/507f1f77bcf86cd799439012/download?user_id=507f1f77bcf86cd799439011" \
-  -o rewritten_resume.txt
+  -o rewritten_resume.pdf
 ```
 
 ---

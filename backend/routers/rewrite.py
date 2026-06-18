@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException, Query
-from fastapi.responses import FileResponse, PlainTextResponse
+from fastapi.responses import StreamingResponse
 from bson.objectid import ObjectId
+from io import BytesIO
 
 from database import get_collection
 from services.rewrite_service import rewrite_resume
+from services.pdf_service import text_to_pdf_bytes
 
 router = APIRouter()
 
@@ -38,7 +40,7 @@ async def rewrite(id: str, user_id: str = Query(...)):
 @router.get("/rewrite/{id}/download")
 async def download_rewritten(id: str, user_id: str = Query(...)):
     """
-    Download the rewritten resume as a .txt file.
+    Download the rewritten resume as a PDF file.
     """
     collection = get_collection()
     try:
@@ -53,9 +55,18 @@ async def download_rewritten(id: str, user_id: str = Query(...)):
     if not rewritten_text:
         raise HTTPException(status_code=400, detail="Resume not yet rewritten")
 
-    filename = doc["filename"].rsplit(".", 1)[0] + "_rewritten.txt"
+    # Generate PDF from text
+    try:
+        pdf_bytes = text_to_pdf_bytes(rewritten_text)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate PDF: {str(e)}")
 
-    return PlainTextResponse(
-        content=rewritten_text,
+    # Create filename with .pdf extension
+    filename = doc["filename"].rsplit(".", 1)[0] + "_rewritten.pdf"
+
+    # Return PDF as streaming response
+    return StreamingResponse(
+        BytesIO(pdf_bytes),
+        media_type="application/pdf",
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
