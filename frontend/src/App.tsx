@@ -110,9 +110,35 @@ export default function App() {
     }
   }
 
-  const handleDownload = () => {
-    if (result?.id && userId) {
-      window.open(`${API_URL}/rewrite/${result.id}/download?user_id=${userId}`, '_blank')
+  const handleDownload = async () => {
+    if (!result?.id || !userId) {
+      setError('Missing resume or user information')
+      return
+    }
+
+    try {
+      setError(null)
+      const downloadUrl = `${API_URL}/rewrite/${result.id}/download?user_id=${userId}`
+
+      // Fetch the PDF file as blob
+      const response = await axios.get(downloadUrl, {
+        responseType: 'blob',
+        headers: { 'Accept': 'application/pdf' }
+      })
+
+      // Create blob URL and trigger download
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `resume_rewritten.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode?.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (err) {
+      const detail = (err as any).response?.data?.detail || 'PDF download failed. Please try again.'
+      setError(detail)
+      console.error('Download error:', err)
     }
   }
 

@@ -182,7 +182,7 @@ export default function ResultPanel({ result, rewritten, onRewrite, onDownload, 
               btn.style.transform = 'translateY(0)'
             }}
           >
-            📄 Download as TXT
+            📄 Download as PDF
           </button>
         </div>
       )}
