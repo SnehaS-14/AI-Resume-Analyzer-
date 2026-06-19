@@ -110,6 +110,25 @@ export default function App() {
     }
   }
 
+  const handleRewriteHistory = async () => {
+    if (!selectedHistoryItem?.id || !userId) return
+    setRewriting(true)
+    setError(null)
+
+    try {
+      const response = await axios.post(`${API_URL}/rewrite/${selectedHistoryItem.id}?user_id=${userId}`)
+      setSelectedHistoryItem({
+        ...selectedHistoryItem,
+        rewritten_text: response.data.rewritten_text
+      })
+    } catch (err) {
+      const detail = (err as any).response?.data?.detail || 'Rewrite failed'
+      setError(detail)
+    } finally {
+      setRewriting(false)
+    }
+  }
+
   const handleDownload = async (analysisId?: string) => {
     const id = analysisId || result?.id
     if (!id || !userId) {
@@ -395,9 +414,9 @@ export default function App() {
                 <ResultPanel
                   result={selectedHistoryItem as AnalysisResult}
                   rewritten={selectedHistoryItem.rewritten_text || null}
-                  onRewrite={async () => {}}
+                  onRewrite={handleRewriteHistory}
                   onDownload={() => handleDownload(selectedHistoryItem?.id)}
-                  rewriting={false}
+                  rewriting={rewriting}
                 />
               </div>
             ) : (

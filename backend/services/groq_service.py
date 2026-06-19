@@ -69,19 +69,26 @@ def _parse_llm_json(raw: str) -> dict:
         # First attempt: direct parsing
         result = json.loads(json_str)
     except json.JSONDecodeError:
-        # Second attempt: clean control characters
+        # Second attempt: aggressively clean problematic characters
         try:
-            # Remove invalid control characters (keep newlines/tabs but escape them)
+            # Remove all control characters except newline and tab
             json_str_cleaned = "".join(
-                char if ord(char) >= 32 or char in '\n\t' else ""
-                for char in json_str
+                char for char in json_str
+                if ord(char) >= 32 or char in '\n\t\r'
             )
+            # Try parsing again
             result = json.loads(json_str_cleaned)
-        except json.JSONDecodeError as exc:
-            raise HTTPException(
-                status_code=500,
-                detail=f"Failed to parse JSON from Groq response: {exc}",
-            )
+        except json.JSONDecodeError:
+            # Third attempt: escape problematic strings
+            try:
+                # Remove characters with ASCII < 32 (control chars)
+                json_str_cleaned = re.sub(r'[\x00-\x1f]', '', json_str)
+                result = json.loads(json_str_cleaned)
+            except json.JSONDecodeError as exc:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Failed to parse JSON from Groq response: {exc}",
+                )
 
     required = {"overall_score", "ats_score", "strengths", "weaknesses",
                 "action_items", "summary"}
