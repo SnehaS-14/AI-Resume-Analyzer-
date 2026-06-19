@@ -172,7 +172,7 @@ export default function ResultPanel({ result, rewritten, onRewrite, onDownload, 
             {rewritten}
           </div>
           <button
-            onClick={onDownload}
+            onClick={() => onDownload()}
             disabled={downloading}
             style={{...buttonStyle('primary'), width: '100%', opacity: downloading ? 0.7 : 1, cursor: downloading ? 'not-allowed' : 'pointer'}}
             onMouseEnter={(e) => {

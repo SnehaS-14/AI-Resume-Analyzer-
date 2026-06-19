@@ -131,9 +131,19 @@ export default function App() {
   }
 
   const handleDownload = async (analysisId?: string) => {
+    // For history items, use the passed analysisId; for new uploads, use result?.id
     const id = analysisId || result?.id
+
     if (!id || !userId) {
+      console.error('Download failed - missing data:', { analysisId, resultId: result?.id, userId })
       setError('Missing resume or user information')
+      return
+    }
+
+    // Ensure id is a string, not an object
+    if (typeof id !== 'string') {
+      console.error('ID is not a string:', id, typeof id)
+      setError('Invalid resume ID')
       return
     }
 
@@ -419,7 +429,13 @@ export default function App() {
                   result={selectedHistoryItem as AnalysisResult}
                   rewritten={selectedHistoryItem.rewritten_text || null}
                   onRewrite={handleRewriteHistory}
-                  onDownload={() => handleDownload(selectedHistoryItem?.id)}
+                  onDownload={() => {
+                    if (selectedHistoryItem && selectedHistoryItem.id) {
+                      handleDownload(selectedHistoryItem.id)
+                    } else {
+                      setError('Resume ID not found')
+                    }
+                  }}
                   rewriting={rewriting}
                   downloading={downloading}
                 />
