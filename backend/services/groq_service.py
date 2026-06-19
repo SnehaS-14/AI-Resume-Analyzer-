@@ -27,7 +27,7 @@ def analyze_resume(resume_text: str) -> dict:
                 {"role": "user", "content": resume_text},
             ],
             temperature=0.2,
-            max_tokens=1024,
+            max_tokens=2048,
         )
     except Exception as exc:
         raise HTTPException(
@@ -51,8 +51,10 @@ def _parse_llm_json(raw: str) -> dict:
 
     Strategy: strip fences first, then locate the outermost { } block.
     """
+    # Clean up markdown fences
     cleaned = re.sub(r"```(?:json)?\s*", "", raw).replace("```", "").strip()
 
+    # Find JSON object boundaries
     start = cleaned.find("{")
     end = cleaned.rfind("}")
     if start == -1 or end == -1:
@@ -64,12 +66,22 @@ def _parse_llm_json(raw: str) -> dict:
     json_str = cleaned[start : end + 1]
 
     try:
+        # First attempt: direct parsing
         result = json.loads(json_str)
-    except json.JSONDecodeError as exc:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to parse JSON from Groq response: {exc}",
-        )
+    except json.JSONDecodeError:
+        # Second attempt: clean control characters
+        try:
+            # Remove invalid control characters (keep newlines/tabs but escape them)
+            json_str_cleaned = "".join(
+                char if ord(char) >= 32 or char in '\n\t' else ""
+                for char in json_str
+            )
+            result = json.loads(json_str_cleaned)
+        except json.JSONDecodeError as exc:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to parse JSON from Groq response: {exc}",
+            )
 
     required = {"overall_score", "ats_score", "strengths", "weaknesses",
                 "action_items", "summary"}
