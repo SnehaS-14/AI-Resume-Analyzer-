@@ -6,6 +6,7 @@ interface ResultPanelProps {
   onRewrite: () => Promise<void>
   onDownload: () => void
   rewriting: boolean
+  downloading?: boolean
 }
 
 function ScoreRing({ score, label, color }: {
@@ -74,7 +75,7 @@ function Section({ title, items, color }: {
   )
 }
 
-export default function ResultPanel({ result, rewritten, onRewrite, onDownload, rewriting }: ResultPanelProps) {
+export default function ResultPanel({ result, rewritten, onRewrite, onDownload, rewriting, downloading = false }: ResultPanelProps) {
   const {
     overall_score, ats_score,
     strengths, weaknesses, action_items, summary,
@@ -172,17 +173,30 @@ export default function ResultPanel({ result, rewritten, onRewrite, onDownload, 
           </div>
           <button
             onClick={onDownload}
-            style={{...buttonStyle('primary'), width: '100%'}}
+            disabled={downloading}
+            style={{...buttonStyle('primary'), width: '100%', opacity: downloading ? 0.7 : 1, cursor: downloading ? 'not-allowed' : 'pointer'}}
             onMouseEnter={(e) => {
               const btn = e.currentTarget as HTMLButtonElement
-              btn.style.transform = 'translateY(-2px)'
+              if (!downloading) btn.style.transform = 'translateY(-2px)'
             }}
             onMouseLeave={(e) => {
               const btn = e.currentTarget as HTMLButtonElement
-              btn.style.transform = 'translateY(0)'
+              if (!downloading) btn.style.transform = 'translateY(0)'
             }}
           >
-            📄 Download as PDF
+            {downloading ? (
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <span style={{ display: 'inline-block', width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
+                Downloading...
+              </span>
+            ) : (
+              '📄 Download as PDF'
+            )}
+            <style>{`
+              @keyframes spin {
+                to { transform: rotate(360deg); }
+              }
+            `}</style>
           </button>
         </div>
       )}

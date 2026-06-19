@@ -43,6 +43,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null)
   const [rewritten, setRewritten] = useState<string | null>(null)
   const [rewriting, setRewriting] = useState(false)
+  const [downloading, setDownloading] = useState(false)
   const [history, setHistory] = useState<ResumeRecord[]>([])
   const [historyLoading, setHistoryLoading] = useState(false)
   const [selectedHistoryItem, setSelectedHistoryItem] = useState<ResumeRecord | null>(null)
@@ -137,6 +138,7 @@ export default function App() {
     }
 
     try {
+      setDownloading(true)
       setError(null)
       const downloadUrl = `${API_URL}/rewrite/${id}/download?user_id=${userId}`
 
@@ -159,6 +161,8 @@ export default function App() {
       const detail = (err as any).response?.data?.detail || 'PDF download failed. Please try again.'
       setError(detail)
       console.error('Download error:', err)
+    } finally {
+      setDownloading(false)
     }
   }
 
@@ -417,6 +421,7 @@ export default function App() {
                   onRewrite={handleRewriteHistory}
                   onDownload={() => handleDownload(selectedHistoryItem?.id)}
                   rewriting={rewriting}
+                  downloading={downloading}
                 />
               </div>
             ) : (
@@ -429,6 +434,7 @@ export default function App() {
                     onRewrite={handleRewrite}
                     onDownload={handleDownload}
                     rewriting={rewriting}
+                    downloading={downloading}
                   />
                 )}
               </>
