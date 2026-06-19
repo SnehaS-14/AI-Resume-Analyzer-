@@ -2,7 +2,7 @@ import json
 import os
 import re
 
-from groq import Groq
+from openai import OpenAI
 from fastapi import HTTPException
 from dotenv import load_dotenv
 
@@ -10,14 +10,17 @@ from prompts.resume_prompt import SYSTEM_PROMPT
 
 load_dotenv()
 
-_client = Groq(api_key=os.environ["GROQ_API_KEY"])
-_model = os.environ.get("MODEL_NAME", "llama-3.3-70b-versatile")
+_client = OpenAI(
+    api_key=os.environ["OPENROUTER_API_KEY"],
+    base_url="https://openrouter.ai/api/v1"
+)
+_model = os.environ.get("MODEL_NAME", "meta-llama/llama-2-70b-chat")
 
 
 def analyze_resume(resume_text: str) -> dict:
     """
-    Send resume text to Groq and return parsed JSON analysis.
-    Raises HTTP 500 on Groq failure or unparseable response.
+    Send resume text to OpenRouter and return parsed JSON analysis.
+    Raises HTTP 500 on OpenRouter failure or unparseable response.
     """
     try:
         response = _client.chat.completions.create(
@@ -32,7 +35,7 @@ def analyze_resume(resume_text: str) -> dict:
     except Exception as exc:
         raise HTTPException(
             status_code=500,
-            detail=f"Groq API call failed: {exc}",
+            detail=f"OpenRouter API call failed: {exc}",
         )
 
     raw_text: str = response.choices[0].message.content or ""
@@ -60,7 +63,7 @@ def _parse_llm_json(raw: str) -> dict:
     if start == -1 or end == -1:
         raise HTTPException(
             status_code=500,
-            detail="Groq returned a response that does not contain valid JSON.",
+            detail="OpenRouter returned a response that does not contain valid JSON.",
         )
 
     json_str = cleaned[start : end + 1]
@@ -87,7 +90,7 @@ def _parse_llm_json(raw: str) -> dict:
             except json.JSONDecodeError as exc:
                 raise HTTPException(
                     status_code=500,
-                    detail=f"Failed to parse JSON from Groq response: {exc}",
+                    detail=f"Failed to parse JSON from OpenRouter response: {exc}",
                 )
 
     required = {"overall_score", "ats_score", "strengths", "weaknesses",
@@ -96,7 +99,7 @@ def _parse_llm_json(raw: str) -> dict:
     if missing:
         raise HTTPException(
             status_code=500,
-            detail=f"Groq response missing required fields: {missing}",
+            detail=f"OpenRouter response missing required fields: {missing}",
         )
 
     return result

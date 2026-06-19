@@ -1,11 +1,14 @@
 import os
-from groq import Groq
+from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
 
-_client = Groq(api_key=os.environ["GROQ_API_KEY"])
-_model = os.environ.get("MODEL_NAME", "llama-3.3-70b-versatile")
+_client = OpenAI(
+    api_key=os.environ["OPENROUTER_API_KEY"],
+    base_url="https://openrouter.ai/api/v1"
+)
+_model = os.environ.get("MODEL_NAME", "meta-llama/llama-2-70b-chat")
 
 
 def rewrite_resume(original_text: str, action_items: list[str]) -> str:

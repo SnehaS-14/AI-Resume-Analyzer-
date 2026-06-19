@@ -1,6 +1,6 @@
 fastapi
 uvicorn[standard]
-groq
+openai
 pdfplumber
 python-docx
 python-dotenv
