@@ -272,7 +272,7 @@ export default function App() {
                   letterSpacing: '0.5px',
                   display: window.innerWidth < 480 ? 'none' : 'block',
                 }}>
-                  Powered by Groq
+                  Powered by Open Router
                 </p>
               </div>
             </div>
